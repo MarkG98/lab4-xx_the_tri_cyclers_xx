@@ -1,3 +1,38 @@
+`define LW 6'h23
+`define SW 6'h2b
+`define J 6'h02
+`define JAL 6'h03
+`define BEQ 6'h04
+`define BNE 6'h05
+`define XORI 6'h0E
+`define ADDI 6'h08
+`define RINST 6'h00
+`define JR 6'h08
+`define ADD 6'h20
+`define SUB 6'h22
+`define SLT 6'h2a
+
+// always @(instruction) begin
+//     case (instruction[31:26])
+//       `LW:   begin regDst = 0; regWr = 1; ALUControl = 3'b000; ALUSrc = 0; memWr = 0; memToReg = 1; jump = 0; branch = 0; notEqual = 0; jReg = 0; jAndLink = 0; end
+//       `SW:   begin regDst = 0; regWr = 0; ALUControl = 3'b000; ALUSrc = 0; memWr = 1; memToReg = 0; jump = 0; branch = 0; notEqual = 0; jReg = 0; jAndLink = 0; end
+//       `J:    begin regDst = 0; regWr = 0; ALUControl = 3'b000; ALUSrc = 0; memWr = 0; memToReg = 0; jump = 1; branch = 0; notEqual = 0; jReg = 0; jAndLink = 0; end
+//       `JAL:  begin regDst = 0; regWr = 1; ALUControl = 3'b000; ALUSrc = 0; memWr = 0; memToReg = 0; jump = 1; branch = 0; notEqual = 0; jReg = 0; jAndLink = 1; end
+//       `BEQ:  begin regDst = 0; regWr = 0; ALUControl = 3'b001; ALUSrc = 1; memWr = 0; memToReg = 0; jump = 0; branch = 1; notEqual = 0; jReg = 0; jAndLink = 0; end
+//       `BNE:  begin regDst = 0; regWr = 0; ALUControl = 3'b001; ALUSrc = 1; memWr = 0; memToReg = 0; jump = 0; branch = 1; notEqual = 1; jReg = 0; jAndLink = 0; end
+//       `XORI: begin regDst = 0; regWr = 1; ALUControl = 3'b010; ALUSrc = 0; memWr = 0; memToReg = 0; jump = 0; branch = 0; notEqual = 0; jReg = 0; jAndLink = 0; end
+//       `ADDI: begin regDst = 0; regWr = 1; ALUControl = 3'b000; ALUSrc = 0; memWr = 0; memToReg = 0; jump = 0; branch = 0; notEqual = 0; jReg = 0; jAndLink = 0; end
+//       `RINST: begin case(instruction[5:0])
+//           `JR:   begin regDst = 0; regWr = 0; ALUControl = 3'b000; ALUSrc = 1; memWr = 0; memToReg = 0; jump = 1; branch = 0; notEqual = 0; jReg = 1; jAndLink = 0; end
+//           `ADD:  begin regDst = 1; regWr = 1; ALUControl = 3'b000; ALUSrc = 1; memWr = 0; memToReg = 0; jump = 0; branch = 0; notEqual = 0; jReg = 0; jAndLink = 0; end
+//           `SUB:  begin regDst = 1; regWr = 1; ALUControl = 3'b001; ALUSrc = 1; memWr = 0; memToReg = 0; jump = 0; branch = 0; notEqual = 0; jReg = 0; jAndLink = 0; end
+//           `SLT:  begin regDst = 1; regWr = 1; ALUControl = 3'b011; ALUSrc = 1; memWr = 0; memToReg = 0; jump = 0; branch = 0; notEqual = 0; jReg = 0; jAndLink = 0; end
+//         endcase
+//       end
+//     endcase
+//   end
+
+
 // Finite State machine to set control signals for a multicycle CPU
 module FSM
 (
