@@ -48,7 +48,7 @@ end
 
 // Change state on the p-clk edge
 always @ (posedge clk) begin
-  
+
 end
 
 // Output logic (depends only on state - Moore machine)

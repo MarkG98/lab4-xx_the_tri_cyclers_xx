@@ -1,4 +1,4 @@
-module signExtend16to32
+module signExtend
 #(parameter WIDTH=30)
 (
     output[WIDTH-1:0] signExtended,
