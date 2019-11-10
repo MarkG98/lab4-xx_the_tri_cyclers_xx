@@ -1,3 +1,4 @@
+// Defines for instructions
 `define LW 6'h23
 `define SW 6'h2b
 `define J 6'h02
@@ -12,78 +13,134 @@
 `define SUB 6'h22
 `define SLT 6'h2a
 
-// always @(instruction) begin
-//     case (instruction[31:26])
-//       `LW:   begin regDst = 0; regWr = 1; ALUControl = 3'b000; ALUSrc = 0; memWr = 0; memToReg = 1; jump = 0; branch = 0; notEqual = 0; jReg = 0; jAndLink = 0; end
-//       `SW:   begin regDst = 0; regWr = 0; ALUControl = 3'b000; ALUSrc = 0; memWr = 1; memToReg = 0; jump = 0; branch = 0; notEqual = 0; jReg = 0; jAndLink = 0; end
-//       `J:    begin regDst = 0; regWr = 0; ALUControl = 3'b000; ALUSrc = 0; memWr = 0; memToReg = 0; jump = 1; branch = 0; notEqual = 0; jReg = 0; jAndLink = 0; end
-//       `JAL:  begin regDst = 0; regWr = 1; ALUControl = 3'b000; ALUSrc = 0; memWr = 0; memToReg = 0; jump = 1; branch = 0; notEqual = 0; jReg = 0; jAndLink = 1; end
-//       `BEQ:  begin regDst = 0; regWr = 0; ALUControl = 3'b001; ALUSrc = 1; memWr = 0; memToReg = 0; jump = 0; branch = 1; notEqual = 0; jReg = 0; jAndLink = 0; end
-//       `BNE:  begin regDst = 0; regWr = 0; ALUControl = 3'b001; ALUSrc = 1; memWr = 0; memToReg = 0; jump = 0; branch = 1; notEqual = 1; jReg = 0; jAndLink = 0; end
-//       `XORI: begin regDst = 0; regWr = 1; ALUControl = 3'b010; ALUSrc = 0; memWr = 0; memToReg = 0; jump = 0; branch = 0; notEqual = 0; jReg = 0; jAndLink = 0; end
-//       `ADDI: begin regDst = 0; regWr = 1; ALUControl = 3'b000; ALUSrc = 0; memWr = 0; memToReg = 0; jump = 0; branch = 0; notEqual = 0; jReg = 0; jAndLink = 0; end
-//       `RINST: begin case(instruction[5:0])
-//           `JR:   begin regDst = 0; regWr = 0; ALUControl = 3'b000; ALUSrc = 1; memWr = 0; memToReg = 0; jump = 1; branch = 0; notEqual = 0; jReg = 1; jAndLink = 0; end
-//           `ADD:  begin regDst = 1; regWr = 1; ALUControl = 3'b000; ALUSrc = 1; memWr = 0; memToReg = 0; jump = 0; branch = 0; notEqual = 0; jReg = 0; jAndLink = 0; end
-//           `SUB:  begin regDst = 1; regWr = 1; ALUControl = 3'b001; ALUSrc = 1; memWr = 0; memToReg = 0; jump = 0; branch = 0; notEqual = 0; jReg = 0; jAndLink = 0; end
-//           `SLT:  begin regDst = 1; regWr = 1; ALUControl = 3'b011; ALUSrc = 1; memWr = 0; memToReg = 0; jump = 0; branch = 0; notEqual = 0; jReg = 0; jAndLink = 0; end
-//         endcase
-//       end
-//     endcase
-//   end
-
-
 // Finite State machine to set control signals for a multicycle CPU
 module FSM
 (
   output PC_WE,
-  output [1:0] PCSrc,
-  output MemIn,
-  output Mem_WE,
-  output IR_WE,
-  output A_WE,
-  output B_WE,
-  output ALUSrcA,
-  output [2:0] ALUSrcB,
-  output [2:0] ALUop,
-  output Dst,
-  output RegIn,
-  output Reg_WE,
-  output [3:0] Branch,
-  output JAL,
-  input clk,
-  input [31:0] instruction
+  output reg [1:0] PCSrc,
+  output reg MemIn,
+  output reg Mem_WE,
+  output reg IR_WE,
+  output reg ALUSrcA,
+  output reg [2:0] ALUSrcB,
+  output reg [2:0] ALUop,
+  output reg Dst,
+  output reg RegIn,
+  output reg Reg_WE,
+  output reg [3:0] Branch,
+  output reg JAL,
+  input reg clk,
+  input reg [31:0] instruction
 );
 
 // State encoding (binary counter)
 reg [4:0] state;
-localparam IF = 0,
+localparam IF__ = 0,
            ID_JAL = 1,
            ID_J = 2,
            ID_BEQ_BNE = 3,
-           ID_SW_ADD_SUB_SLT_LW_JR_ADDI_XORI = 4,
-           EX_BEQ = 5,
-           EX_BNE = 6,
-           EX_LW_SW_ADDI = 7,
-           EX_XORI = 8,
-           EX_ADD = 9,
-           EX_SUB = 10,
-           EX_SLT = 11,
-           EX_JR = 12,
-           MEM_LW = 13,
-           MEM_SW = 14,
-           WB_LW = 15,
-           WB_ADDI_XORI = 16,
-           WB_ADD_SUB_SLY = 17;
+           EX_BEQ = 4,
+           EX_BNE = 5,
+           EX_LW_SW_ADDI = 6,
+           EX_XORI = 7,
+           EX_ADD = 8,
+           EX_SUB = 9,
+           EX_SLT = 10,
+           EX_JR = 11,
+           MEM_LW = 12,
+           MEM_SW = 13,
+           WB_LW = 14,
+           WB_ADDI_XORI = 15,
+           WB_ADD_SUB_SLT = 16;
 
-//Initialize state to IF
+//Initialize state to IF_
 initial begin
-  state = IF;
+  state = IF_;
 end
 
 // Change state on the p-clk edge
 always @ (posedge clk) begin
+  // Transitions from IF_
+  if (state == IF__ && instruction[31:26] == `JAL) begin
+    state <= ID_JAL;
+  end
+  if (state == IF_ && instruction[31:26] == `J) begin
+    state <= ID_J;
+  endcondition
+  if (state == IF_ && (instruction[31:26] == `BEQ || instruction[31:26] == `BNE)) begin
+    state <= ID_BEQ_BNE;
+  end
+  if (state == IF_ && (instruction[31:26] == `LW || instruction[31:26] || instruction[31:26])) begin
+    state <= EX_LW_SW_ADDI;
+  end
+  if (state == IF_ && instruction[31:26] == `XORI) begin
+    state <= EX_XORI;
+  end
+  if (state == IF_ && instruction[5:0] == `ADD) begin
+    state <= EX_ADD;
+  end
+  if (state == IF_ && instruction[5:0] == `SUB) begin
+    state <= EX_SUB;
+  end
+  if (state == IF_ && instruction[5:0] == `SLT) begin
+    state <= EX_SLT;
+  end
+  if (state == IF_ && instruction[5:0] == `JR) begin
+    state <= EX_JR;
+  end
 
+  // Transition from ID states
+  if (state == ID_J) begin
+    state <= IF_;
+  end
+  if (state == ID_JAL) begin
+    state <= IF_;
+  end
+  if (state == ID_BEQ_BNE && instruction[31:26] == `BEQ) begin
+    state <= EX_BEQ;
+  end
+  if (state == ID_BEQ_BNE && instruction[31:26] == `BNE) begin
+    state <= EX_BNE;
+  end
+
+  // Transition from EX states
+  if (state == EX_LW_SW_ADDI && instruction[31:26] == `LW) begin
+    state <= MEM_LW;
+  end
+  if (state == EX_LW_SW_ADDI && instruction[31:26] == `SW) begin
+    state <= MEM_SW;
+  end
+  if (state == EX_LW_SW_ADDI && instruction[31:26] == `ADDI) begin
+    state <= WB_ADDI_XORI;
+  end
+  if (state == EX_XORI) begin
+    state <= WB_ADDI_XORI;
+  end
+  if (state == EX_ADD) begin
+    state <= WB_ADD_SUB_SLT;
+  end
+  if (state == EX_SUB) begin
+    state <= WB_ADD_SUB_SLT;
+  end
+  if (state == EX_SLT) begin
+    state <= WB_ADD_SUB_SLT;
+  end
+  if (state == EX_JR) begin
+    state <= IF_;
+  end
+
+  // Transitions from MEM
+  if (state == MEM_LW) begin
+    state <= WB_LW;
+  end
+  if (state == MEM_SW) begin
+    state <= IF_;
+  end
+
+  // Transition from WB
+  if (state == WB_LW || state == WB_ADDI_XORI || state == WB_ADD_SUB_SLT) begin
+    state <= IF_;
+  end
 end
 
 // Output logic (depends only on state - Moore machine)
