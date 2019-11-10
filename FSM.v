@@ -16,11 +16,20 @@
 // Finite State machine to set control signals for a multicycle CPU
 module FSM
 (
+<<<<<<< HEAD
   output PC_WE,
+=======
+  output reg PC_WE,
+>>>>>>> 7e016c4e07ab556590a04f509183b6bae5c6e6d1
   output reg [1:0] PCSrc,
   output reg MemIn,
   output reg Mem_WE,
   output reg IR_WE,
+<<<<<<< HEAD
+=======
+  output reg A_WE,
+  output reg B_WE,
+>>>>>>> 7e016c4e07ab556590a04f509183b6bae5c6e6d1
   output reg ALUSrcA,
   output reg [2:0] ALUSrcB,
   output reg [2:0] ALUop,
@@ -29,13 +38,18 @@ module FSM
   output reg Reg_WE,
   output reg [3:0] Branch,
   output reg JAL,
+<<<<<<< HEAD
   input reg clk,
   input reg [31:0] instruction
+=======
+  input clk,
+  input [31:0] instruction
+>>>>>>> 7e016c4e07ab556590a04f509183b6bae5c6e6d1
 );
 
 // State encoding (binary counter)
 reg [4:0] state;
-localparam IF__ = 0,
+localparam IF_ = 0,
            ID_JAL = 1,
            ID_J = 2,
            ID_BEQ_BNE = 3,
@@ -143,9 +157,28 @@ always @ (posedge clk) begin
   end
 end
 
-// Output logic (depends only on state - Moore machine)
+// output reg logic (depends only on state - Moore machine)
 always @ (state) begin
-
+  case (state)
+    IF_:  begin Mem_WE = 0; RegIn = 0; IR_WE = 1; PCSrc = 1; Branch = 0; ALUSrcB = 3; ALUSrcA = 0; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 1; ALUop = 0; Dst = 0; end
+    ID_J:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 2; Branch = 0; ALUSrcB = 0; ALUSrcA = 0; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 1; ALUop = 0; Dst = 0; end
+    ID_SW_ADD_SUB_SLT_LW_JR_ADDI_XORI:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 0; ALUSrcA = 0; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 0; Dst = 0; end
+    ID_BEQ_BNE:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 0; ALUSrcA = 0; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 0; Dst = 0; end
+    ID_JAL:  begin Mem_WE = 0; RegIn = 1; IR_WE = 0; PCSrc = 2; Branch = 0; ALUSrcB = 0; ALUSrcA = 0; Reg_WE = 1; JAL = 1; MemIn = 0; PC_WE = 1; ALUop = 0; Dst = 0; end
+    EX_BEQ:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 1; ALUSrcB = 2; ALUSrcA = 1; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 1; Dst = 0; end
+    EX_BNE:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 2; ALUSrcB = 2; ALUSrcA = 1; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 1; Dst = 0; end
+    EX_LW_SW_ADDI:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 1; ALUSrcA = 1; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 0; Dst = 0; end
+    EX_JR:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 1; Branch = 0; ALUSrcB = 4; ALUSrcA = 1; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 1; ALUop = 0; Dst = 0; end
+    EX_ADD:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 2; ALUSrcA = 1; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 0; Dst = 0; end
+    EX_SLT:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 2; ALUSrcA = 1; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 3; Dst = 0; end
+    EX_SUB:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 2; ALUSrcA = 1; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 1; Dst = 0; end
+    EX_XORI:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 1; ALUSrcA = 1; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 2; Dst = 0; end
+    MEM_LW:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 0; ALUSrcA = 0; Reg_WE = 0; JAL = 0; MemIn = 1; PC_WE = 0; ALUop = 0; Dst = 0; end
+    MEM_SW:  begin Mem_WE = 1; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 0; ALUSrcA = 0; Reg_WE = 0; JAL = 0; MemIn = 1; PC_WE = 0; ALUop = 0; Dst = 0; end
+    WB_LW:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 0; ALUSrcA = 0; Reg_WE = 1; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 0; Dst = 0; end
+    WB_ADD_SUB_SLT:  begin Mem_WE = 0; RegIn = 1; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 2; ALUSrcA = 1; Reg_WE = 1; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 0; Dst = 1; end
+    WB_ADDI_XORI:  begin Mem_WE = 0; RegIn = 1; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 1; ALUSrcA = 1; Reg_WE = 1; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 0; Dst = 0; end
+  endcase
 end
 
 endmodule // FSM
