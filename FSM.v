@@ -146,23 +146,23 @@ end
 // output reg logic (depends only on state - Moore machine)
 always @ (state) begin
   case (state)
-    IF_:  begin Mem_WE = 0; RegIn = 0; IR_WE = 1; PCSrc = 1; Branch = 0; ALUSrcB = 3; ALUSrcA = 0; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 1; ALUop = 0; Dst = 0; end
-    ID_J:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 2; Branch = 0; ALUSrcB = 0; ALUSrcA = 0; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 1; ALUop = 0; Dst = 0; end
-    ID_BEQ_BNE:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 0; ALUSrcA = 0; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 0; Dst = 0; end
-    ID_JAL:  begin Mem_WE = 0; RegIn = 1; IR_WE = 0; PCSrc = 2; Branch = 0; ALUSrcB = 0; ALUSrcA = 0; Reg_WE = 1; JAL = 1; MemIn = 0; PC_WE = 1; ALUop = 0; Dst = 0; end
-    EX_BEQ:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 1; ALUSrcB = 2; ALUSrcA = 1; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 1; Dst = 0; end
-    EX_BNE:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 2; ALUSrcB = 2; ALUSrcA = 1; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 1; Dst = 0; end
-    EX_LW_SW_ADDI:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 1; ALUSrcA = 1; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 0; Dst = 0; end
-    EX_JR:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 1; Branch = 0; ALUSrcB = 4; ALUSrcA = 1; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 1; ALUop = 0; Dst = 0; end
-    EX_ADD:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 2; ALUSrcA = 1; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 0; Dst = 0; end
-    EX_SLT:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 2; ALUSrcA = 1; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 3; Dst = 0; end
-    EX_SUB:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 2; ALUSrcA = 1; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 1; Dst = 0; end
-    EX_XORI:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 1; ALUSrcA = 1; Reg_WE = 0; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 2; Dst = 0; end
-    MEM_LW:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 0; ALUSrcA = 0; Reg_WE = 0; JAL = 0; MemIn = 1; PC_WE = 0; ALUop = 0; Dst = 0; end
-    MEM_SW:  begin Mem_WE = 1; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 0; ALUSrcA = 0; Reg_WE = 0; JAL = 0; MemIn = 1; PC_WE = 0; ALUop = 0; Dst = 0; end
-    WB_LW:  begin Mem_WE = 0; RegIn = 0; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 0; ALUSrcA = 0; Reg_WE = 1; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 0; Dst = 0; end
-    WB_ADD_SUB_SLT:  begin Mem_WE = 0; RegIn = 1; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 2; ALUSrcA = 1; Reg_WE = 1; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 0; Dst = 1; end
-    WB_ADDI_XORI:  begin Mem_WE = 0; RegIn = 1; IR_WE = 0; PCSrc = 0; Branch = 0; ALUSrcB = 1; ALUSrcA = 1; Reg_WE = 1; JAL = 0; MemIn = 0; PC_WE = 0; ALUop = 0; Dst = 0; end
+    IF_:  begin JAL = 0; Mem_WE = 0; ALUop = 0; ALUSrcA = 0; PC_WE = 1; RegIn = 0; Reg_WE = 0; Branch = 0; PCSrc = 1; IR_WE = 1; Dst = 0; ALUSrcB = 3; end
+    ID_J:  begin JAL = 0; Mem_WE = 0; ALUop = 0; ALUSrcA = 0; PC_WE = 1; RegIn = 0; Reg_WE = 0; Branch = 0; PCSrc = 2; IR_WE = 0; Dst = 0; ALUSrcB = 0; end
+    ID_BEQ_BNE:  begin JAL = 0; Mem_WE = 0; ALUop = 0; ALUSrcA = 0; PC_WE = 0; RegIn = 0; Reg_WE = 0; Branch = 0; PCSrc = 0; IR_WE = 0; Dst = 0; ALUSrcB = 0; end
+    ID_JAL:  begin JAL = 1; Mem_WE = 0; ALUop = 0; ALUSrcA = 0; PC_WE = 1; RegIn = 1; Reg_WE = 1; Branch = 0; PCSrc = 2; IR_WE = 0; Dst = 0; ALUSrcB = 0; end
+    EX_BEQ:  begin JAL = 0; Mem_WE = 0; ALUop = 1; ALUSrcA = 1; PC_WE = 0; RegIn = 0; Reg_WE = 0; Branch = 1; PCSrc = 0; IR_WE = 0; Dst = 0; ALUSrcB = 2; end
+    EX_BNE:  begin JAL = 0; Mem_WE = 0; ALUop = 1; ALUSrcA = 1; PC_WE = 0; RegIn = 0; Reg_WE = 0; Branch = 2; PCSrc = 0; IR_WE = 0; Dst = 0; ALUSrcB = 2; end
+    EX_LW_SW_ADDI:  begin JAL = 0; Mem_WE = 0; ALUop = 0; ALUSrcA = 1; PC_WE = 0; RegIn = 0; Reg_WE = 0; Branch = 0; PCSrc = 0; IR_WE = 0; Dst = 0; ALUSrcB = 1; end
+    EX_JR:  begin JAL = 0; Mem_WE = 0; ALUop = 0; ALUSrcA = 1; PC_WE = 1; RegIn = 0; Reg_WE = 0; Branch = 0; PCSrc = 1; IR_WE = 0; Dst = 0; ALUSrcB = 4; end
+    EX_ADD:  begin JAL = 0; Mem_WE = 0; ALUop = 0; ALUSrcA = 1; PC_WE = 0; RegIn = 0; Reg_WE = 0; Branch = 0; PCSrc = 0; IR_WE = 0; Dst = 0; ALUSrcB = 2; end
+    EX_SLT:  begin JAL = 0; Mem_WE = 0; ALUop = 3; ALUSrcA = 1; PC_WE = 0; RegIn = 0; Reg_WE = 0; Branch = 0; PCSrc = 0; IR_WE = 0; Dst = 0; ALUSrcB = 2; end
+    EX_SUB:  begin JAL = 0; Mem_WE = 0; ALUop = 1; ALUSrcA = 1; PC_WE = 0; RegIn = 0; Reg_WE = 0; Branch = 0; PCSrc = 0; IR_WE = 0; Dst = 0; ALUSrcB = 2; end
+    EX_XORI:  begin JAL = 0; Mem_WE = 0; ALUop = 2; ALUSrcA = 1; PC_WE = 0; RegIn = 0; Reg_WE = 0; Branch = 0; PCSrc = 0; IR_WE = 0; Dst = 0; ALUSrcB = 1; end
+    MEM_LW:  begin JAL = 0; Mem_WE = 0; ALUop = 0; ALUSrcA = 0; PC_WE = 0; RegIn = 0; Reg_WE = 0; Branch = 0; PCSrc = 0; IR_WE = 0; Dst = 0; ALUSrcB = 0; end
+    MEM_SW:  begin JAL = 0; Mem_WE = 1; ALUop = 0; ALUSrcA = 0; PC_WE = 0; RegIn = 0; Reg_WE = 0; Branch = 0; PCSrc = 0; IR_WE = 0; Dst = 0; ALUSrcB = 0; end
+    WB_LW:  begin JAL = 0; Mem_WE = 0; ALUop = 0; ALUSrcA = 0; PC_WE = 0; RegIn = 0; Reg_WE = 1; Branch = 0; PCSrc = 0; IR_WE = 0; Dst = 0; ALUSrcB = 0; end
+    WB_ADD_SUB_SLT:  begin JAL = 0; Mem_WE = 0; ALUop = 0; ALUSrcA = 1; PC_WE = 0; RegIn = 1; Reg_WE = 1; Branch = 0; PCSrc = 0; IR_WE = 0; Dst = 1; ALUSrcB = 2; end
+    WB_ADDI_XORI:  begin JAL = 0; Mem_WE = 0; ALUop = 0; ALUSrcA = 1; PC_WE = 0; RegIn = 1; Reg_WE = 1; Branch = 0; PCSrc = 0; IR_WE = 0; Dst = 0; ALUSrcB = 1; end
   endcase
 end
 
