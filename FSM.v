@@ -18,7 +18,6 @@ module FSM
 (
   output reg PC_WE,
   output reg [1:0] PCSrc,
-  output reg MemIn,
   output reg Mem_WE,
   output reg IR_WE,
   output reg ALUSrcA,
