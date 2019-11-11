@@ -1,5 +1,5 @@
 module signExtend
-#(parameter WIDTH=30)
+#(parameter WIDTH=32)
 (
     output[WIDTH-1:0] signExtended,
     input [15:0] extendee
