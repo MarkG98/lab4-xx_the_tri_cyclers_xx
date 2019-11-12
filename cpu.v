@@ -28,7 +28,7 @@ wire [3:0] Branch;
 wire JAL;
 
 reg PCounter_En;
-reg Rtor31;
+reg [31:0] Rtor31;
 reg [4:0] Aw;
 reg [31:0] Dw;
 reg [31:0] ALUA;
