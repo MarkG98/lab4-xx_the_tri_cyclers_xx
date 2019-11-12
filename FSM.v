@@ -69,7 +69,7 @@ always @ (posedge clk) begin
   if (state == IF_ && (instruction[31:26] == `BEQ || instruction[31:26] == `BNE)) begin
     state <= ID_BEQ_BNE;
   end
-  if (state == IF_ && (instruction[31:26] == `LW || instruction[31:26] == `SW || instruction[31:26] == )) begin
+  if (state == IF_ && (instruction[31:26] == `LW || instruction[31:26] == `SW || instruction[31:26] == `ADDI)) begin
     state <= EX_LW_SW_ADDI;
   end
   if (state == IF_ && instruction[31:26] == `XORI) begin
