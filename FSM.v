@@ -76,16 +76,16 @@ always @ (posedge clk) begin
   if (state == IF_ && raw_instruction[31:26] == `XORI) begin
     state <= EX_XORI;
   end
-  if (state == IF_ && (raw_instruction[5:0] == `RINST && raw_instruction[5:0] == `ADD)) begin
+  if (state == IF_ && (raw_instruction[31:26] == `RINST && raw_instruction[5:0] == `ADD)) begin
     state <= EX_ADD;
   end
-  if (state == IF_ && (raw_instruction[5:0] == `RINST && raw_instruction[5:0] == `SUB)) begin
+  if (state == IF_ && (raw_instruction[31:26] == `RINST && raw_instruction[5:0] == `SUB)) begin
     state <= EX_SUB;
   end
-  if (state == IF_ && (raw_instruction[5:0] == `RINST && raw_instruction[5:0] == `SLT)) begin
+  if (state == IF_ && (raw_instruction[31:26] == `RINST && raw_instruction[5:0] == `SLT)) begin
     state <= EX_SLT;
   end
-  if (state == IF_ && (raw_instruction[5:0] == `RINST && raw_instruction[5:0] == `JR)) begin
+  if (state == IF_ && (raw_instruction[31:26] == `RINST && raw_instruction[5:0] == `JR)) begin
     state <= EX_JR;
   end
 
