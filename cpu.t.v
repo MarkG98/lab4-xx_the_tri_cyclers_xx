@@ -5,7 +5,7 @@ module cpuTest ();
 
   cpu CPU(.clk(clk));
 
-  reg init_data = 1;
+  reg init_data = 0;
 
   reg signed [31:0] temp;
 
@@ -13,16 +13,16 @@ module cpuTest ();
 
   initial begin
     // Put text dump (hex) into the first parameter in the below function
-    $readmemh("asmtests/xx_the_uni_cyclers_xx/HanoiTXT", CPU.sysmem.mem, 0);
+    $readmemh("asmtests/TODO-Team-Name/spintxt", CPU.sysmem.mem, 0);
     if (init_data) begin
     // Put the data dump (hex) into the first parameter in the below function
-      $readmemh("asmtests/xx_the_uni_cyclers_xx/HanoiDATA", CPU.sysmem.mem, 2048);
+      $readmemh("asmtests", CPU.sysmem.mem, 2048);
     end
 
     $dumpfile("cpu.vcd");
     $dumpvars();
 
-    clk = 1; # 5
+    clk = 0; # 5
     repeat(3000) begin
       clk = 1; #10 clk = 0; # 10;
     end

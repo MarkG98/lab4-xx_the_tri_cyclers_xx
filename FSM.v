@@ -29,7 +29,8 @@ module FSM
   output reg [3:0] Branch,
   output reg JAL,
   input clk,
-  input [31:0] instruction
+  input [31:0] instruction,
+  input [31:0] raw_instruction
 );
 
 // State encoding (binary counter)
@@ -60,31 +61,31 @@ end
 // Change state on the p-clk edge
 always @ (posedge clk) begin
   // Transitions from IF_
-  if (state == IF_ && instruction[31:26] == `JAL) begin
+  if (state == IF_ && raw_instruction[31:26] == `JAL) begin
     state <= ID_JAL;
   end
-  if (state == IF_ && instruction[31:26] == `J) begin
+  if (state == IF_ && raw_instruction[31:26] == `J) begin
     state <= ID_J;
   end
-  if (state == IF_ && (instruction[31:26] == `BEQ || instruction[31:26] == `BNE)) begin
+  if (state == IF_ && (raw_instruction[31:26] == `BEQ || raw_instruction[31:26] == `BNE)) begin
     state <= ID_BEQ_BNE;
   end
-  if (state == IF_ && (instruction[31:26] == `LW || instruction[31:26] == `SW || instruction[31:26] == `ADDI)) begin
+  if (state == IF_ && (raw_instruction[31:26] == `LW || raw_instruction[31:26] == `SW || raw_instruction[31:26] == `ADDI)) begin
     state <= EX_LW_SW_ADDI;
   end
-  if (state == IF_ && instruction[31:26] == `XORI) begin
+  if (state == IF_ && raw_instruction[31:26] == `XORI) begin
     state <= EX_XORI;
   end
-  if (state == IF_ && instruction[5:0] == `ADD) begin
+  if (state == IF_ && (raw_instruction[5:0] == `RINST && raw_instruction[5:0] == `ADD)) begin
     state <= EX_ADD;
   end
-  if (state == IF_ && instruction[5:0] == `SUB) begin
+  if (state == IF_ && (raw_instruction[5:0] == `RINST && raw_instruction[5:0] == `SUB)) begin
     state <= EX_SUB;
   end
-  if (state == IF_ && instruction[5:0] == `SLT) begin
+  if (state == IF_ && (raw_instruction[5:0] == `RINST && raw_instruction[5:0] == `SLT)) begin
     state <= EX_SLT;
   end
-  if (state == IF_ && instruction[5:0] == `JR) begin
+  if (state == IF_ && (raw_instruction[5:0] == `RINST && raw_instruction[5:0] == `JR)) begin
     state <= EX_JR;
   end
 
@@ -127,7 +128,12 @@ always @ (posedge clk) begin
   if (state == EX_JR) begin
     state <= IF_;
   end
-
+  if (state == EX_BEQ) begin
+    state <= IF_;
+  end
+  if (state == EX_BNE) begin
+    state <= IF_;
+  end
   // Transitions from MEM
   if (state == MEM_LW) begin
     state <= WB_LW;

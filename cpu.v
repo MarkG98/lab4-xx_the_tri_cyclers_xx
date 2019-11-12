@@ -68,7 +68,8 @@ FSM FSMcontroller(.PC_WE(PC_WE),
                   .Branch(Branch),
                   .JAL(JAL),
                   .clk(clk),
-                  .instruction(currInstr));
+                  .instruction(currInstr),
+                  .raw_instruction(instruction));
 
 // Mux for programCounter Enable input
 always @(*) begin
