@@ -13,20 +13,20 @@ module cpuTest ();
 
   initial begin
     // Put text dump (hex) into the first parameter in the below function
-    $readmemh("asmtests/TODO-Team-Name/spintxt", CPU.sysmem.mem, 0);
+    $readmemh("asmtests/xx_the_uni_cyclers_xx/subAndXori", CPU.sysmem.mem, 0);
     if (init_data) begin
     // Put the data dump (hex) into the first parameter in the below function
       $readmemh("asmtests", CPU.sysmem.mem, 2048);
     end
 
-    $dumpfile("cpu.vcd");
-    $dumpvars();
+    //$dumpfile("cpu.vcd");
+    //$dumpvars();
 
     clk = 0; # 5
     repeat(3000) begin
       clk = 1; #10 clk = 0; # 10;
     end
-    # 2000 $finish();
+    //# 2000 $finish();
 
 
     f = $fopen("datamem.csv","w");
@@ -37,6 +37,7 @@ module cpuTest ();
     $fclose(f);
 
     f1 = $fopen("regmem.csv","w");
+        $fwrite(f1,"%d,\n", CPU.registerFile.zeroRegOutput); # 5
         $fwrite(f1,"%d,\n", CPU.registerFile.genblock[1]._reg_out); # 5
         $fwrite(f1,"%d,\n", CPU.registerFile.genblock[2]._reg_out); # 5
         $fwrite(f1,"%d,\n", CPU.registerFile.genblock[3]._reg_out); # 5

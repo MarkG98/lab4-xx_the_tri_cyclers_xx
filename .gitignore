@@ -1,3 +1,5 @@
 *.vvp
 *.out
-*,vcd
+*.vcd
+regmem.csv
+datamem.csv

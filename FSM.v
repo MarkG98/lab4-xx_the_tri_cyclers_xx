@@ -16,21 +16,21 @@
 // Finite State machine to set control signals for a multicycle CPU
 module FSM
 (
-  output reg PC_WE,
-  output reg [1:0] PCSrc,
-  output reg Mem_WE,
-  output reg IR_WE,
-  output reg ALUSrcA,
-  output reg [2:0] ALUSrcB,
-  output reg [2:0] ALUop,
-  output reg Dst,
-  output reg RegIn,
-  output reg Reg_WE,
-  output reg [3:0] Branch,
-  output reg JAL,
-  input clk,
-  input [31:0] instruction,
-  input [31:0] raw_instruction
+  output reg PC_WE, // Control signal for PC register enable (muxed with zero and ~zero)
+  output reg [1:0] PCSrc, // Select signal for mux into the d port of the PC register
+  output reg Mem_WE, // Write enable for the data/instruction memory
+  output reg IR_WE, // Enable for the instruction register
+  output reg ALUSrcA, // Control signal for mux into operand A input of ALU
+  output reg [2:0] ALUSrcB, // Control signal for mux into operand B input of ALU
+  output reg [2:0] ALUop, // Control signal for the ALU operation
+  output reg Dst, // Control signal for the mux into Aw (memory)
+  output reg RegIn, // Control signal for mux into Dw port of register file
+  output reg Reg_WE, // Register enable control signal
+  output reg [3:0] Branch, // Control signal for mux into the PC register enable
+  output reg JAL, // Control signal for mux that goes into mux controlled by Dst
+  input clk, // Clock signal
+  input [31:0] instruction, // Instruction leaving the instruction register
+  input [31:0] raw_instruction // Instruction going into the instruction register
 );
 
 // State encoding (binary counter)
